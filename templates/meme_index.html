@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random Meme</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .meme-container {
+            text-align: center;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .subreddit {
+            font-size: 1.2em;
+            color: #333;
+        }
+        .btn {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 1em;
+            color: #fff;
+            background-color: #007bff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="meme-container">
+        <img id="memeImage" src="{{ meme_pic }}" alt="Random Meme">
+        <div class="subreddit">From: <strong>{{ meme_title }}</strong></div>
+        <button class="btn" onclick="getNewMeme()">Get New Meme</button>
+    </div>
+    <script>
+        function getNewMeme() {
+            fetch('/new_meme')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.meme_pic) {
+                        document.getElementById('memeImage').src = data.meme_pic;
+                        document.querySelector('.subreddit').innerHTML = 'From: <strong>' + data.meme_title + '</strong>';
+                    } else {
+                        console.error('Error fetching new meme:', data);
+                    }
+                })
+                .catch(error => {
+                    console.error('Fetch error:', error);
+                });
+        }
+    </script>
+</body>
+</html>
